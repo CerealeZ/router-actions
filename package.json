@@ -1,0 +1,53 @@
+{
+  "name": "router-actions",
+  "version": "0.1.0",
+  "description": "Action system library for server-side form submissions with type-safe handling for React Router v7 Framework Mode.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "prepublishOnly": "tsc && tsc-alias"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0",
+    "@types/node": "^20.0.0",
+    "react-router": "^7.5.3",
+    "@types/react": "^18.2.21",
+    "tsc-alias": "^1.8.2"
+  },
+  "peerDependencies": {
+    "react-router": "^7.5.3",
+    "react": "^18.2.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-router": {
+      "optional": false
+    },
+    "react": {
+      "optional": false
+    }
+  },
+  "keywords": [
+    "react-router",
+    "actions",
+    "server-actions"
+  ],
+  "author": {
+    "name": "CerealeZ",
+    "email": "samuelharo.dev@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github+https://github.com/CerealeZ/router-actions"
+  }
+}
