@@ -1,3 +1,5 @@
+import type { useLoaderData } from "react-router";
+
 export type RecordPayload = Record<PropertyKey, unknown>;
 
 /**
@@ -21,17 +23,10 @@ export type RecoveredOptions<
   [K in U["action"]]: Extract<U, { action: K }>["value"];
 };
 
-export type InferActionReturn<
-  T extends (
-    ...args: never[]
-  ) => ActionReturn<Key, Data> | Promise<ActionReturn<Key, Data>>,
-  Key extends PropertyKey = string,
-  Data = unknown,
-> = RecoveredOptions<
-  Awaited<
-    Extract<
-      ReturnType<T>,
-      ActionReturn<Key, Data> | Promise<ActionReturn<Key, Data>>
-    >
-  >
+export type InferActionReturn<T> = RecoveredOptions<
+  SerializeFrom<T> extends { action: PropertyKey; value: unknown }
+    ? SerializeFrom<T>
+    : never
 >;
+
+type SerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
