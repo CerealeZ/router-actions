@@ -49,5 +49,6 @@
   "repository": {
     "type": "git",
     "url": "github+https://github.com/CerealeZ/router-actions"
-  }
+  },
+  "license": "MIT"
 }
