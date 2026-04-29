@@ -12,7 +12,10 @@ export type ServerActionReturn<T extends RecordPayload> = {
   };
 }[keyof T];
 
-export type ActionReturn<ActionName extends PropertyKey, Data> = {
+export type ActionPayload<
+  ActionName extends PropertyKey = string,
+  Data = unknown,
+> = {
   action: ActionName;
   value: Data;
 };
@@ -23,10 +26,10 @@ export type RecoveredOptions<
   [K in U["action"]]: Extract<U, { action: K }>["value"];
 };
 
-export type InferActionReturn<T> = RecoveredOptions<
-  SerializeFrom<T> extends { action: PropertyKey; value: unknown }
-    ? SerializeFrom<T>
-    : never
->;
-
+export type InferActionReturn<T extends (...args: never[]) => unknown> =
+  SerializeFrom<() => ReturnType<T>> extends ActionPayload
+    ? RecoveredOptions<
+        Extract<SerializeFrom<() => ReturnType<T>>, ActionPayload>
+      >
+    : never;
 type SerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;

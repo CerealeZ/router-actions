@@ -4,7 +4,7 @@ export { Actions } from "@/actions";
 // Export types
 export type {
   ServerActionReturn,
-  ActionReturn,
+  ActionPayload,
   InferActionReturn,
 } from "./types";
 

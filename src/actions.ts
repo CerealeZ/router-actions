@@ -10,7 +10,7 @@ import {
   type RecordPayload,
   type ServerActionReturn,
   type RecoveredOptions,
-  type ActionReturn,
+  type ActionPayload,
 } from "@/types";
 
 export class Actions<ServerData extends ServerActionReturn<RecordPayload>> {
@@ -167,17 +167,17 @@ export class Actions<ServerData extends ServerActionReturn<RecordPayload>> {
     return new URL(url).searchParams.get("action_type");
   }
 
-  static createActionReturn<T extends string, U>(
+  static createActionPayload<T extends string, U>(
     action: T,
     data: U,
-  ): ActionReturn<T, U> {
+  ): ActionPayload<T, U> {
     return {
       action,
       value: data,
     };
   }
 
-  static createServerActions<
+  static defineActions<
     ActionsArgs extends { request: Request },
     T extends Record<PropertyKey, (args: ActionsArgs) => Promise<unknown>>,
   >(actions: T) {
@@ -188,8 +188,8 @@ export class Actions<ServerData extends ServerActionReturn<RecordPayload>> {
       const callAction = actions[action];
       if (!callAction) throw new Error("Action not found");
       const data = await callAction(args);
-      return Actions.createActionReturn(action, data) as {
-        [K in keyof T]: ActionReturn<K, Awaited<ReturnType<T[K]>>>;
+      return Actions.createActionPayload(action, data) as {
+        [K in keyof T]: ActionPayload<K, Awaited<ReturnType<T[K]>>>;
       }[keyof T];
     };
     return handler;
