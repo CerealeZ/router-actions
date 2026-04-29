@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Actions } from "@/actions";
 import type { RecoveredOptions } from "@/types";
 import { useSubmit, type SubmitOptions, type SubmitTarget } from "react-router";
@@ -20,6 +20,19 @@ export const useRouterAction = <
   const [loading, setLoading] = useState(false);
 
   const mountedRef = useRef(true);
+  const onSuccessRef = useRef(options?.onSuccess);
+  const onErrorRef = useRef(options?.onError);
+
+  useEffect(() => {
+    onSuccessRef.current = options?.onSuccess;
+    onErrorRef.current = options?.onError;
+  }, [options?.onSuccess, options?.onError]);
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const reset = useCallback(() => {
     setData(undefined);
@@ -47,7 +60,7 @@ export const useRouterAction = <
           setLoading(false);
         }
 
-        options?.onSuccess?.(result);
+        onSuccessRef.current?.(result);
 
         return result;
       } catch (err) {
@@ -56,12 +69,12 @@ export const useRouterAction = <
           setLoading(false);
         }
 
-        options?.onError?.(err);
+        onErrorRef.current?.(err);
 
         throw err;
       }
     },
-    [actions, actionType, submit, options],
+    [actions, actionType, submit],
   );
 
   return {
